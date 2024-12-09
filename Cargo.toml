@@ -1,0 +1,16 @@
+[package]
+name = "shuttlings-cch24"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cargo-manifest = "0.17.0"
+leaky-bucket = "1.1.2"
+regex = "1.11.1"
+rocket = { version = "0.5.0", features = ["json"] }
+serde = { version = "1.0.215", features = ["derive"] }
+serde_json = { version = "1.0.133", features = ["raw_value"] }
+shuttle-rocket = "0.49.0"
+shuttle-runtime = "0.49.0"
+tokio = "1.26.0"
+toml = "0.8.19"
