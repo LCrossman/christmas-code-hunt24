@@ -418,6 +418,20 @@ pub async fn gift_manifest(manifest: &str, _guard: ContentTypeGuard) -> Result<S
 }
 
 
+struct ContentTypeTest;
+
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for ContentTypeTest {
+   type Error = ();
+   async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+      match request.content_type() {
+         Some(ct) if ct.is_json() => Outcome::Success(ContentTypeGuard),
+	 _ => rocket::outcome::Outcome::Forward(Status::UnsupportedMediaType),
+	 }
+     }
+}
+
 
 #[derive(PartialEq, Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -427,28 +441,7 @@ enum MilkResponse {
     A(String),
 }
 
-
-//pub struct MilkClient {
-//    limiter: RateLimiter,
-//    acquire: Option<AcquireOwned>,  
-//}
-
-//impl Future for MilkClient {
-//   type Output = ();
-//   fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
-//        let mut this = self.project();
-
-//        loop {
-//            if let Some(acquire) = this.acquire.as_mut().as_pin_mut() {
-//                futures::ready!(acquire.poll(cx));
-//                return Poll::Ready(());
-//            }
-//
-//            this.acquire.set(Some(this.limiter.clone().acquire_owned(1000)));
-//        }
-//    }
-//}
-
+async fn json_milk(bucket: &State<Arc<RateLimiter>>, _guard: ContentTypeGuard) 
 
  
 #[rocket::post("/9/milk")]
